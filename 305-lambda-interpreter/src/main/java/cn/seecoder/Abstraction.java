@@ -10,6 +10,15 @@ public class Abstraction extends AST {
     }
 
     public String toString(){
-        return "";
+        return "\\"+param.toString()+"."+body.toString();
+    }
+
+    public boolean equals(AST ast){
+        if (ast instanceof Abstraction){
+            if (this.body.equals(((Abstraction) ast).body))
+                return true;
+            else
+                return false;
+        }else return false;
     }
 }

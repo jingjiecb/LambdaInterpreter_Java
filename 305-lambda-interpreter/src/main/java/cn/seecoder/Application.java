@@ -10,6 +10,24 @@ public class Application extends AST{
     }
 
     public String toString(){
-        return "";
+        if (lhs==null){
+            return rhs.toString();
+        }
+        else if (rhs==null){
+            return lhs.toString();
+        }
+        else if (rhs!=null&&lhs!=null){
+            return "("+lhs.toString()+" "+rhs.toString()+")";
+        }
+        else return "";
+    }
+
+    public boolean equals(AST ast){
+        if (ast instanceof Application){
+            if (this.lhs.equals(((Application)ast).lhs)&&this.rhs.equals(((Application)ast).rhs))
+                return true;
+            else
+                return false;
+        }else return false;
     }
 }
