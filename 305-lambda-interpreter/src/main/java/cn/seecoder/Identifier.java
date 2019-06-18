@@ -11,7 +11,15 @@ public class Identifier extends AST {
         value = v;
     }
     public String toString(){
+        return name;
+    }
 
-        return "";
+    public boolean equals(AST ast){
+        if(ast instanceof Identifier) {
+            if (this.value.equals(((Identifier) ast).value))
+                return true;
+            else
+                return false;
+        }else return false;
     }
 }

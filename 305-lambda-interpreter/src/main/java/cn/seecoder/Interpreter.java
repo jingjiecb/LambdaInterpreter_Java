@@ -27,10 +27,37 @@ public class Interpreter {
     }
 
     private   AST evalAST(AST ast){
-        //write your code here
-
-        return null;
-
+        while (true){
+            //System.out.println("ast:"+ast.toString());
+            if (isApplication(ast)){//如果整个最顶层是应用，
+                Application ap=(Application)ast;
+                if (isApplication(ap.lhs)){//如果左支也是应用，
+                    ap.lhs=evalAST(ap.lhs);//把左支求值。
+                    if (isApplication(ap.lhs)){//如果左支求值之后还是应用，
+                        return ast;//说明已经无法继续求值了，直接返回现在的状况。
+                    }
+                }
+                else if (isAbstraction(ap.lhs)){//如果左支是抽象，
+                    if (isApplication(ap.rhs)){//如果右支是应用，
+                        ap.rhs=evalAST(ap.rhs);//那就先把应用求值，准备往左边带入,
+                    }
+                    ast=substitute(((Abstraction)ap.lhs).body,ap.rhs);//代入。
+                }
+                else {
+                    ((Application) ast).rhs = evalAST(((Application) ast).rhs);
+                    return ast;
+                }
+            }
+            else if (isAbstraction(ast)){
+                Abstraction abs=((Abstraction)ast);
+                abs.body=evalAST(abs.body);
+                return ast;
+            }
+            else if (isIdentifier(ast)){
+                return ast;
+            }
+            else return null;
+        }
     }
     private AST substitute(AST node,AST value){
 
@@ -57,10 +84,16 @@ public class Interpreter {
 
      */
     private AST subst(AST node, AST value, int depth){
-        //write your code here
-
-        return null;
-
+        if(isApplication(node)){
+            return new Application(subst(((Application) node).lhs,value,depth),subst(((Application) node).rhs,value,depth));
+        }
+        else if(isAbstraction(node)){
+            return new Abstraction(((Abstraction) node).param,subst(((Abstraction) node).body,value,depth+1));
+        }
+        else{
+            if(depth==Integer.parseInt(((Identifier)node).value)) return shift(depth,value,0);
+            else return node;
+        }
     }
 
     /**
@@ -82,11 +115,17 @@ public class Interpreter {
      */
 
     private AST shift(int by, AST node,int from){
-        //write your code here
-
-        return null;
-
+        if(isApplication(node)){
+            return new Application(shift(by,((Application)(node)).lhs,from), shift(by,((Application)(node)).rhs,from));
+        }
+        else if(isAbstraction(node)){
+            return new Abstraction(((Abstraction) node).param,shift(by,((Abstraction) node).body,from+1));
+        }
+        else{
+            return new Identifier(((Identifier) node).name, String.valueOf(Integer.parseInt(((Identifier) node).value) + (Integer.parseInt(((Identifier) node).value) >= from ? by : 0)));
+        }
     }
+
     static String ZERO = "(\\f.\\x.x)";
     static String SUCC = "(\\n.\\f.\\x.f (n f x))";
     static String ONE = app(SUCC, ZERO);
