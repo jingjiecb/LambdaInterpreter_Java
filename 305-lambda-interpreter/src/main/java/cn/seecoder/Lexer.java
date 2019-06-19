@@ -61,19 +61,19 @@ public class Lexer{
 
 
     //check token == t
-    public boolean check(TokenType t){//注：将原来的next方法名称改为check，方便理解。
+    public boolean next(TokenType t){//注：将原来的next方法名称改为check，方便理解。
         if (token==t) return true;//判断一下此时对象内部储存的token是不是函数参数中所给的token，然后不操作。
         else return false;
     }
 
     //assert matching the token type, and move next token
-    public void skip(TokenType t){//注：将原来的match方法名称改为skip，方面理解
+    public void match(TokenType t){//注：将原来的match方法名称改为skip，方面理解
         assert (token==t);//此时对象内部储存的token必须是参数所给的token，不然抛出错误。
         nextToken();//对象内部储存的token更新为下一个。
     }
 
     //skip token  and move next token
-    public boolean guessAndNext(TokenType t){//注：将原来的skip方法名称改为guessAndNext，方便理解
+    public boolean skip(TokenType t){//注：将原来的skip方法名称改为guessAndNext，方便理解
         if (token==t){
             nextToken();//如果和假设中的token匹配，就返回true并自己更新为下一个。
             return true;

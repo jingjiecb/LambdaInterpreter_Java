@@ -11,7 +11,7 @@ public class Parser {
 
     public AST parse(){
         AST ast = term(new ArrayList<>());
-//        System.out.println(lexer.skip(TokenType.EOF));
+//        System.out.println(lexer.match();(TokenType.EOF));
         return ast;
     }
 
@@ -19,11 +19,11 @@ public class Parser {
         String param;
         String paramValue;
 
-        if (lexer.guessAndNext(TokenType.LAMBDA)){//判断现在的token是不是lambda，如果是，lexer自动更新，执行下面的，不是滚蛋。
-            if (lexer.check(TokenType.LCID)){//判断现在的token是不是LCID，如果是，执行下面的。
+        if (lexer.skip(TokenType.LAMBDA)){//判断现在的token是不是lambda，如果是，lexer自动更新，执行下面的，不是滚蛋。
+            if (lexer.next(TokenType.LCID)){//判断现在的token是不是LCID，如果是，执行下面的。
                 param=lexer.tokenvalue;//读取LCID的名称。
-                lexer.skip(TokenType.LCID);//lexer更新。
-                if (lexer.guessAndNext(TokenType.DOT)){//判断现在的token是不是DOT，如果是，la LCID .构成了抽象的组成结构,执行下面的。
+                lexer.match(TokenType.LCID);//lexer更新。
+                if (lexer.skip(TokenType.DOT)){//判断现在的token是不是DOT，如果是，la LCID .构成了抽象的组成结构,执行下面的。
                     ctx.add(0,param);//将这个抽象中的形式LCID名称加入字符串组的第一个。
                     paramValue=""+ctx.indexOf(param);//获得这个LCID的索引，转化为字符串。
                     AST aTerm=term(ctx);//继续从term角度构造语法树，获得这个抽象的函数体部分。
@@ -47,16 +47,16 @@ public class Parser {
     private AST atom(ArrayList<String> ctx){
         String param;
         String paramValue;
-        if (lexer.guessAndNext(TokenType.LPAREN)){
+        if (lexer.skip(TokenType.LPAREN)){
             AST aTerm=term(ctx);
-            if (lexer.guessAndNext(TokenType.RPAREN)){
+            if (lexer.skip(TokenType.RPAREN)){
                 return aTerm;
             }
         }
-        else if (lexer.check(TokenType.LCID)){
+        else if (lexer.next(TokenType.LCID)){
                 param=lexer.tokenvalue;
                 paramValue=""+ctx.indexOf(param);
-                lexer.skip(TokenType.LCID);
+                lexer.match(TokenType.LCID);
                 return new Identifier(param,paramValue);
             }
         return  null;
