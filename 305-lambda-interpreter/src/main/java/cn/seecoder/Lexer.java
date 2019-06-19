@@ -22,10 +22,10 @@ public class Lexer{
 
             //抽象出token
             switch (charAtIndex()){
-                case '\\':index++;token=TokenType.LAMBDA;return token;
-                case '.':index++;token=TokenType.DOT;return token;
-                case '(':index++;token=TokenType.LPAREN;return token;
-                case ')':index++;token=TokenType.RPAREN;return token;
+                case '\\':index++;token=TokenType.LAMBDA;System.out.println(token);return token;
+                case '.':index++;token=TokenType.DOT;System.out.println(token);return token;
+                case '(':index++;token=TokenType.LPAREN;System.out.println(token);return token;
+                case ')':index++;token=TokenType.RPAREN;System.out.println(token);return token;
                 case ' ': index++; return nextToken();
                 default:
                     if (('a'<=charAtIndex()&&charAtIndex()<='z')||('A'<=charAtIndex()&&charAtIndex()<='Z')){
@@ -39,9 +39,11 @@ public class Lexer{
                         }
                         tokenvalue=string.toString();//将这个标识符抽象成LCID抽象词，并且将token的值设置成标识符
                         token=TokenType.LCID;
+                        System.out.println(token);
                         return TokenType.LCID;
                     }
                     index++;
+                    System.out.println(token);
                     return TokenType.EOF;//如果是非法字符也直接返回EOF
             }
         }
@@ -49,6 +51,7 @@ public class Lexer{
         //超出范围返回EOF
         else {
             index++;
+            System.out.println(token);
             return TokenType.EOF;
         }
     }
