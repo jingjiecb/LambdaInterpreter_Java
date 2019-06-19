@@ -13,7 +13,7 @@ public class test {
         //System.out.println(str);
         do {
             System.out.print(test_lexer.token);
-            if (test_lexer.check(TokenType.LCID)) System.out.println(":"+test_lexer.tokenvalue);
+            if (test_lexer.next(TokenType.LCID)) System.out.println(":"+test_lexer.tokenvalue);
             else System.out.println();
         }while (test_lexer.nextToken()!=TokenType.EOF);
 
