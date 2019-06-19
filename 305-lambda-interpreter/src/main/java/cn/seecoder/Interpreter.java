@@ -202,10 +202,14 @@ public class Interpreter {
 
             Lexer test_lexer = new Lexer(sources[i]);
             //System.out.println(str);
+
+            /*
             do {
                 System.out.print(test_lexer.token);
                 System.out.println();
             }while (test_lexer.nextToken()!=TokenType.EOF);
+
+             */
 
             String source = sources[i];
 

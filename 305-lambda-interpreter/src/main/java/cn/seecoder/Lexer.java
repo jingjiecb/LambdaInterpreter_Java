@@ -43,6 +43,7 @@ public class Lexer{
                         return TokenType.LCID;
                     }
                     index++;
+                    token=TokenType.EOF;
                     System.out.println(token);
                     return TokenType.EOF;//如果是非法字符也直接返回EOF
             }
@@ -51,6 +52,7 @@ public class Lexer{
         //超出范围返回EOF
         else {
             index++;
+            token=TokenType.EOF;
             System.out.println(token);
             return TokenType.EOF;
         }
