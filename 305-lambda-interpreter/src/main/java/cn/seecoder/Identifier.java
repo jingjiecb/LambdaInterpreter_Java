@@ -11,7 +11,7 @@ public class Identifier extends AST {
         value = v;
     }
     public String toString(){
-        return name;
+        return value;
     }
 
     public boolean equals(AST ast){

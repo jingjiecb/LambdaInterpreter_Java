@@ -10,7 +10,7 @@ public class Abstraction extends AST {
     }
 
     public String toString(){
-        return "\\"+param.toString()+"."+body.toString();
+        return "\\"+"."+body.toString();
     }
 
     public boolean equals(AST ast){
