@@ -11,6 +11,7 @@ public class Interpreter {
     }
 
 
+    //下面的三个函数用来判断ast的具体类型。
     private  boolean isAbstraction(AST ast){
         return ast instanceof Abstraction;
     }
@@ -21,6 +22,7 @@ public class Interpreter {
         return ast instanceof Identifier;
     }
 
+
     public AST eval(){
 
         return evalAST(astAfterParser);
@@ -28,7 +30,7 @@ public class Interpreter {
 
     private   AST evalAST(AST ast){
         while (true){
-            //System.out.println("ast:"+ast.toString());
+
             if (isApplication(ast)){//如果整个最顶层是应用，
                 Application ap=(Application)ast;
                 if (isApplication(ap.lhs)){//如果左支也是应用，
@@ -48,23 +50,24 @@ public class Interpreter {
                     return ast;
                 }
             }
-            else if (isAbstraction(ast)){
+            else if (isAbstraction(ast)){//如果是抽象，
                 Abstraction abs=((Abstraction)ast);
-                abs.body=evalAST(abs.body);
+                abs.body=evalAST(abs.body);//对抽象的函数体进行求值。
                 return ast;
             }
-            else if (isIdentifier(ast)){
-                return ast;
+            else if (isIdentifier(ast)){//如果是标识符，
+                return ast;//直接返回。
             }
             else return null;
         }
     }
-    private AST substitute(AST node,AST value){
+    private AST substitute(AST node,AST value){//将value的一支代入节点处。
 
-        return shift(-1,subst(node,shift(1,value,0),0),0);
-
-
-
+        //System.out.println("node:"+node.toString()+"  value:"+value.toString());
+        AST result=shift(-1,subst(node,shift(1,value,0),0),0);
+        //System.out.println(result.toString());
+        return result;
+        //return shift(-1,subst(node,shift(1,value,0),0),0);
     }
 
     /**
@@ -83,7 +86,7 @@ public class Interpreter {
 
 
      */
-    private AST subst(AST node, AST value, int depth){
+    private AST subst(AST node, AST value, int depth){//value表示要代入的ast，node表示要代入的节点。
         if(isApplication(node)){
             return new Application(subst(((Application) node).lhs,value,depth),subst(((Application) node).rhs,value,depth));
         }

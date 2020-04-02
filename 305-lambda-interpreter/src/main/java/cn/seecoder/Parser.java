@@ -19,7 +19,7 @@ public class Parser {
         String param;
         String paramValue;
 
-        if (lexer.skip(TokenType.LAMBDA)){//判断现在的token是不是lambda，如果是，lexer自动更新，执行下面的，不是滚蛋。
+        if (lexer.skip(TokenType.LAMBDA)){//判断现在的token是不是lambda，如果是，lexer自动更新，执行下面的，不是跳过。
             if (lexer.next(TokenType.LCID)){//判断现在的token是不是LCID，如果是，执行下面的。
                 param=lexer.tokenvalue;//读取LCID的名称。
                 lexer.match(TokenType.LCID);//lexer更新。
@@ -37,27 +37,27 @@ public class Parser {
     }
     private AST application(ArrayList<String> ctx){//从application构造语法树分为左右两支
         AST lhs=atom(ctx);//左边一支
-        AST rhs;
+        AST rhs;//右边一支
         while (true){
             rhs=atom(ctx);
             if (rhs==null) return lhs;
             else lhs = new Application(lhs, rhs);
         }
     }
-    private AST atom(ArrayList<String> ctx){
+    private AST atom(ArrayList<String> ctx){//application的每一支都通过atom方法进行分析
         String param;
         String paramValue;
-        if (lexer.skip(TokenType.LPAREN)){
-            AST aTerm=term(ctx);
+        if (lexer.skip(TokenType.LPAREN)){//第一种情况，这是一个括号括起来的整体
+            AST aTerm=term(ctx);//剥离括号，并且把里面的内容用一开始的方法重新分析。
             if (lexer.skip(TokenType.RPAREN)){
                 return aTerm;
             }
         }
-        else if (lexer.next(TokenType.LCID)){
-                param=lexer.tokenvalue;
-                paramValue=""+ctx.indexOf(param);
-                lexer.match(TokenType.LCID);
-                return new Identifier(param,paramValue);
+        else if (lexer.next(TokenType.LCID)){//第二种情况，这个atom是一个标识符
+                param=lexer.tokenvalue;//记录标识符的名字
+                paramValue=""+ctx.indexOf(param);//记录标识符的带入层值
+                lexer.match(TokenType.LCID);//检查
+                return new Identifier(param,paramValue);//返回标识符
             }
         return  null;
     }

@@ -22,6 +22,7 @@ public class Application extends AST{
         else return "";
     }
 
+    /*
     public boolean equals(AST ast){
         if (ast instanceof Application){
             if (this.lhs.equals(((Application)ast).lhs)&&this.rhs.equals(((Application)ast).rhs))
@@ -30,4 +31,6 @@ public class Application extends AST{
                 return false;
         }else return false;
     }
+
+     */
 }
